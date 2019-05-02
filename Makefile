@@ -1,7 +1,8 @@
 NAME    := scons
 SRC_EXT := gz
 SOURCE   = https://github.com/SCons/$(NAME)/archive/$(VERSION).tar.$(SRC_EXT)
-PATCHES := scons-3.0.0-fix-install.patch grep-filter-list.txt
+PATCHES := scons-3.0.0-fix-install.patch grep-filter-list.txt \
+	   scons-user.html-3.0.4.tar.bz2
 
 DIST    := $(shell rpm --eval %{?dist})
 ifeq ($(DIST),)
