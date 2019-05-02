@@ -27,7 +27,7 @@
 %endif
 Name:           scons%{psuffix}
 Version:        3.0.4
-Release:        1.1
+Release:        2
 Summary:        Replacement for Make
 License:        MIT
 Group:          Development/Tools/Building
@@ -41,10 +41,8 @@ Source2:        grep-filter-list.txt
 Patch8:         scons-3.0.0-fix-install.patch
 BuildRequires:  fdupes
 BuildRequires:  grep
-BuildRequires:  python3-base >= 3.5
-BuildRequires:  python3-lxml
-BuildRequires:  python3-setuptools
-Requires:       python3-base >= 3.5
+BuildRequires:  python-base >= 2.7
+Requires:       python-base >= 2.7
 %if %{with test}
 # texlive texlive-latex3 biber texmaker ghostscript
 BuildRequires:  autoconf
@@ -79,7 +77,6 @@ full power of Python to control compilation.
 
 sed -i -e '/QT_LIBPATH = os.path.join.*QTDIR/s/lib/%{_lib}/' \
     src/engine/SCons/Tool/qt.py
-sed -i 's|%{_bindir}/env python|%{_bindir}/python3|' src/script/*
 
 cp %{SOURCE2} grep-filter-list.txt
 chmod -x src/CHANGES.txt README.rst src/RELEASE.txt
@@ -88,21 +85,21 @@ chmod -x src/CHANGES.txt README.rst src/RELEASE.txt
 rm test/MSVS/vs-14.1-exec.py
 
 %build
-python3 bootstrap.py build/scons
+python bootstrap.py build/scons
 cd build/scons
-%python3_build
+/usr/bin/python2 setup.py build
 
 %install
 %if !%{with test}
 cd build/scons
 ls -lh build/lib
-%python3_install \
+/usr/bin/python2 setup.py  install -O1 --skip-build --root %{buildroot} \
  --standard-lib \
  --no-install-bat \
  --no-version-script \
  --install-scripts=%{_bindir} \
  --record installed_files.txt
-%fdupes %{buildroot}%{python3_sitelib}
+%fdupes %{buildroot}%{python_sitelib}
 %endif
 
 %check
@@ -112,7 +109,7 @@ TEMP_FILE=$(mktemp --tmpdir %{modname}-test.XXXXXX)
 trap 'rm -f -- "$TEMP_FILE"' INT TERM HUP EXIT
 find src/ test/ -name \*.py \
     | grep -F -v -f grep-filter-list.txt >$TEMP_FILE
-python3 runtest.py -f $TEMP_FILE
+python2 runtest.py -f $TEMP_FILE
 %else
 echo "Skiping tests on this architecture due to failures"
 %endif
@@ -123,12 +120,14 @@ echo "Skiping tests on this architecture due to failures"
 %doc src/CHANGES.txt README.rst src/RELEASE.txt
 %if !%{with test}
 %{_bindir}/*
-%{python3_sitelib}/SCons
-%{python3_sitelib}/%{modname}*.egg-info
+%{python_sitelib}/SCons
+%{python_sitelib}/%{modname}*.egg-info
 %{_mandir}/man1/*%{ext_man}
 %endif
 
 %changelog
+* Thu May 02 2019 Brian J. Murrell <brian.murrell@interlinx.bc.ca>
+- Rebuild for SLES 12.3 with python2
 * Tue Mar 26 2019 Tomáš Chvátal <tchvatal@suse.com>
 - Sort out the bcond_with/without for the multibuild to work
   properly
