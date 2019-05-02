@@ -49,16 +49,4 @@ RUN zypper --non-interactive ar -f https://download.opensuse.org/repositories/sc
 RUN zypper --non-interactive install hwloc-devel pmix-devel flex
 
 # scons
-RUN zypper --non-interactive install python3-base python3-lxml \
-                                     python3-setuptools
-
-# cart
-RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/mercury/job/PR-5/lastSuccessfulBuild/artifact/artifacts/sles12.3/ mercury; \
-    zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/ompi/job/PR-4/lastSuccessfulBuild/artifact/artifacts/sles12.3/ ompi; \
-    zypper --non-interactive --gpg-auto-import-keys ref mercury ompi 
-RUN zypper --non-interactive install scons libyaml-devel mercury-devel    \
-                                     ompi-devel python3-base python3-lxml \
-                                     python3-setuptools
-RUN zypper --non-interactive ar https://download.opensuse.org/repositories/devel:libraries:c_c++/SLE_12_SP3/devel:libraries:c_c++.repo; \
-    zypper --non-interactive --gpg-auto-import-keys ref 'A project for basic libraries shared among multiple projects (SLE_12_SP3)'
-RUN zypper --non-interactive install libcmocka-devel
+RUN zypper --non-interactive install fdupes
