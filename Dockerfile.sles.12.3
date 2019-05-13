@@ -50,3 +50,7 @@ RUN zypper --non-interactive install hwloc-devel pmix-devel flex
 
 # scons
 RUN zypper --non-interactive install fdupes
+
+# force an upgrade to get any newly built RPMs
+ARG CACHEBUST=1
+RUN zypper --non-interactive up
