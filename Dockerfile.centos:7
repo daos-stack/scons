@@ -48,23 +48,4 @@ baseurl=${JENKINS_URL}job/daos-stack/job/$repo/job/$branch/lastSuccessfulBuild/a
 enabled=1\n\
 gpgcheck = False\n" >> /etc/mock/default.cfg;                           \
     done;                                                               \
-    echo -e "[jhli-ipmctl]\n\
-name=Copr repo for ipmctl owned by jhli\n\
-baseurl=https://copr-be.cloud.fedoraproject.org/results/jhli/ipmctl/epel-7-\$basearch/\n\
-type=rpm-md\n\
-skip_if_unavailable=True\n\
-gpgcheck=1\n\
-gpgkey=https://copr-be.cloud.fedoraproject.org/results/jhli/ipmctl/pubkey.gpg\n\
-repo_gpgcheck=0\n\
-enabled=1\n\
-enabled_metadata=1\n\n\
-[jhli-safeclib]\n\
-name=Copr repo for safeclib owned by jhli\n\
-baseurl=https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/epel-7-\$basearch/\n\
-type=rpm-md\n\
-skip_if_unavailable=True\n\
-gpgcheck=1\n\
-gpgkey=https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/pubkey.gpg\n\
-repo_gpgcheck=0\n\
-enabled=1\n\
-enabled_metadata=1\n\"\"\"" >> /etc/mock/default.cfg
+    echo "\"\"\"" >> /etc/mock/default.cfg
