@@ -30,22 +30,3 @@ RUN usermod -a -G mock $USER
 # mock in Docker needs to use the old-chroot option
 RUN grep use_nspawn || \
     echo "config_opts['use_nspawn'] = False" >> /etc/mock/site-defaults.cfg
-
-ARG JENKINS_URL=""
-
-RUN echo -e "config_opts['yum.conf'] += \"\"\"\n" >> /etc/mock/default.cfg;  \
-    for repo in openpa libfabric pmix ; do                                   \
-        if [[ $repo = *:* ]]; then                                           \
-            branch="${repo#*:}";                                             \
-            repo="${repo%:*}";                                               \
-        else                                                                 \
-            branch="master";                                                 \
-        fi;                                                                  \
-        JENKINS_URL=$JENKINS_URL;                                            \
-        echo -e "[$repo:$branch:lastSuccessful]\n\
-name=$repo:$branch:lastSuccessful\n\
-baseurl=${JENKINS_URL}job/daos-stack/job/$repo/job/$branch/lastSuccessfulBuild/artifact/artifacts/centos7/\n\
-enabled=1\n\
-gpgcheck = False\n" >> /etc/mock/default.cfg;                           \
-    done;                                                               \
-    echo "\"\"\"" >> /etc/mock/default.cfg
